@@ -1,7 +1,7 @@
 spring:
   profiles:
     include: secret
-    active: local
+    active: local # dev로 pr시 prod로 변경
   servlet:  # S3 이미지 업로드 제한
     multipart:
       enabled: true
