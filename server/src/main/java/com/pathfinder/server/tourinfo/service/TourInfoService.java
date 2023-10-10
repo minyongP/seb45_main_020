@@ -14,19 +14,25 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class TourInfoService {
-    private final String API_KEY;
     private final TourInfoRepository tourInfoRepository;
+    private final TourInfoCities tourInfoCities;
+    private final String API_KEY;
     private final RestTemplate restTemplate;
 
-    public TourInfoService(@Value("${open-api.tour-api.credentials.service-key}") String apiKey, TourInfoRepository tourInfoRepository, RestTemplate restTemplate) {
+    public TourInfoService(@Value("${open-api.tour-api.credentials.service-key}") String apiKey, TourInfoRepository tourInfoRepository, TourInfoCities tourInfoCities, RestTemplate restTemplate) {
         API_KEY = apiKey;
         this.tourInfoRepository = tourInfoRepository;
+        this.tourInfoCities = tourInfoCities;
         this.restTemplate = restTemplate;
     }
 
     @Transactional(readOnly = true)
     public List<TourInfo> findTourInfosByAddress(String address) {
-        List<TourInfo> results = tourInfoRepository.findByAddr1Containing(address);
+        String addr = address;
+        if (addr.equals("랜덤")) {
+            addr = tourInfoCities.address[(int) Math.random() * tourInfoCities.address.length];
+        }
+        List<TourInfo> results = tourInfoRepository.findByAddr1Containing(addr);
 
         Collections.shuffle(results);
 
