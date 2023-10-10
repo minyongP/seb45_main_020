@@ -1,6 +1,8 @@
 package com.pathfinder.server.tourinfo.controller;
 
+import com.nimbusds.jose.util.Pair;
 import com.pathfinder.server.dto.SingleResponseDto;
+import com.pathfinder.server.tourinfo.dto.TourInfoDto;
 import com.pathfinder.server.tourinfo.entity.TourInfo;
 import com.pathfinder.server.tourinfo.mapper.TourInfoMapper;
 import com.pathfinder.server.tourinfo.service.TourInfoService;
@@ -26,12 +28,16 @@ public class TourInfoController {
 
     @GetMapping
     public ResponseEntity getTourInfoList(@RequestParam String address) {
-        List<TourInfo> tourInfos = tourInfoService.findTourInfosByAddress(address);
+        Pair<String, List<TourInfo>> result =  tourInfoService.findTourInfosByAddress(address);
+        String addr = result.getLeft();
+        List<TourInfo> tourInfos =  result.getRight();
+
+        List<TourInfoDto.Response> responses = mapper.tourInfoToTourInfoResponses(tourInfos);
+        TourInfoDto tourInfoDto = new TourInfoDto(responses, addr);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(
-                        mapper.tourInfoToTourInfoResponses(tourInfos)),
-                        HttpStatus.OK
+                new SingleResponseDto<>(tourInfoDto),
+                HttpStatus.OK
         );
     }
 
