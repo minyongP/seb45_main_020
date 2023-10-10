@@ -1,5 +1,6 @@
 package com.pathfinder.server.tourinfo.service;
 
+import com.nimbusds.jose.util.Pair;
 import com.pathfinder.server.tourinfo.entity.TourInfo;
 import com.pathfinder.server.tourinfo.repository.TourInfoRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +28,7 @@ public class TourInfoService {
     }
 
     @Transactional(readOnly = true)
-    public List<TourInfo> findTourInfosByAddress(String address) {
+    public Pair<String, List<TourInfo>> findTourInfosByAddress(String address) {
         String addr = address;
         if (addr.equals("랜덤")) {
             addr = tourInfoCities.address[(int) Math.random() * tourInfoCities.address.length];
@@ -36,7 +37,7 @@ public class TourInfoService {
 
         Collections.shuffle(results);
 
-        return results.stream().limit(6).collect(Collectors.toList());
+        return Pair.of(addr, results.stream().limit(6).collect(Collectors.toList()));
     }
 
 }
