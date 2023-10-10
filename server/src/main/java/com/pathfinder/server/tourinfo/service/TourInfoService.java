@@ -31,7 +31,7 @@ public class TourInfoService {
     public Pair<String, List<TourInfo>> findTourInfosByAddress(String address) {
         String addr = address;
         if (addr.equals("랜덤")) {
-            addr = tourInfoCities.address[(int) Math.random() * tourInfoCities.address.length];
+            addr = tourInfoCities.address[(int) (Math.random() * tourInfoCities.address.length)];
         }
         List<TourInfo> results = tourInfoRepository.findByAddr1Containing(addr);
 
