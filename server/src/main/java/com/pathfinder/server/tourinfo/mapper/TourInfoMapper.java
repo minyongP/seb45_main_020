@@ -9,5 +9,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TourInfoMapper {
-    List<TourInfoDto.Response> tourInfoToTourInfoResponses(List<TourInfo> tourInfos);
+    TourInfoDto.Response tourInfoToTourInfoResponse(TourInfo tourInfo);
+    List<TourInfoDto.Responses> tourInfoToTourInfoResponses(List<TourInfo> tourInfos);
 }

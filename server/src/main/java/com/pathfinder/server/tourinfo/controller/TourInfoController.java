@@ -8,11 +8,9 @@ import com.pathfinder.server.tourinfo.mapper.TourInfoMapper;
 import com.pathfinder.server.tourinfo.service.TourInfoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -32,12 +30,21 @@ public class TourInfoController {
         String addr = result.getLeft();
         List<TourInfo> tourInfos =  result.getRight();
 
-        List<TourInfoDto.Response> responses = mapper.tourInfoToTourInfoResponses(tourInfos);
+        List<TourInfoDto.Responses> responses = mapper.tourInfoToTourInfoResponses(tourInfos);
         TourInfoDto tourInfoDto = new TourInfoDto(responses, addr);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(tourInfoDto),
                 HttpStatus.OK
+        );
+    }
+
+    @GetMapping("{content-id}")
+    public ResponseEntity getTourInfo(@PathVariable("content-id") @Positive long contentId) {
+        TourInfo tourInfo = tourInfoService.findTourInfo(contentId);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.tourInfoToTourInfoResponse(tourInfo))
+                , HttpStatus.OK
         );
     }
 

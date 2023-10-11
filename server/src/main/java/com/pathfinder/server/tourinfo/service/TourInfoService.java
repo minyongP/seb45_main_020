@@ -1,6 +1,7 @@
 package com.pathfinder.server.tourinfo.service;
 
 import com.nimbusds.jose.util.Pair;
+import com.pathfinder.server.global.exception.tourInfoexception.TourInfoNotFoundException;
 import com.pathfinder.server.tourinfo.entity.TourInfo;
 import com.pathfinder.server.tourinfo.repository.TourInfoRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,4 +42,13 @@ public class TourInfoService {
         return Pair.of(addr, results.stream().limit(6).collect(Collectors.toList()));
     }
 
+    @Transactional(readOnly = true)
+    public TourInfo findTourInfo(long contentId) {
+        Optional<TourInfo> optionalTourInfo =
+                tourInfoRepository.findByContentId(contentId);
+        TourInfo findTourInfo =
+                optionalTourInfo.orElseThrow(() ->
+                        new TourInfoNotFoundException());
+        return findTourInfo;
+    }
 }
