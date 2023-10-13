@@ -59,6 +59,8 @@ public class SecurityConfig {
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .headers().frameOptions().disable()
+                .and()
                 .cors(getCorsConfigurerCustomizer())
                 .headers().frameOptions().disable();
 
@@ -108,6 +110,8 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/tag/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/recommend/**").permitAll()
                 .antMatchers("/scrap/**").permitAll()
+                .antMatchers("/h2/**").permitAll()
+                .antMatchers("/comment/**").permitAll()
                 .anyRequest().authenticated();
     }
 
