@@ -1,5 +1,6 @@
 package com.pathfinder.server.member.entity;
 
+import com.pathfinder.server.comment.entity.Comment;
 import com.pathfinder.server.diary.entity.Diary;
 import com.pathfinder.server.member.dto.MemberDto;
 import com.pathfinder.server.recommend.entity.Recommend;
@@ -60,6 +61,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Scrap> scraps = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     public void setScrap(Scrap scrap) {
         scraps.add(scrap);
