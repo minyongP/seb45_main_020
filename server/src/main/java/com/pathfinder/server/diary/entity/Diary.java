@@ -2,6 +2,7 @@ package com.pathfinder.server.diary.entity;
 
 
 import com.pathfinder.server.audit.Auditable;
+import com.pathfinder.server.comment.entity.Comment;
 import com.pathfinder.server.member.entity.Member;
 import com.pathfinder.server.recommend.entity.Recommend;
 //import com.pathfinder.server.scrap.entity.Scrap;
@@ -46,6 +47,9 @@ public class Diary {
     private long recommendedCount;
 
     @Column
+    private long commentCount;
+
+    @Column
     private Integer views = 0;
 
     @Column
@@ -66,6 +70,9 @@ public class Diary {
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<Scrap> scraps = new ArrayList<>();
+
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     public void setMember(Member member) {
         this.member = member;
