@@ -92,9 +92,11 @@ public class DiaryService {
 
     public Page<Diary> getTop3DiariesByRecommendedCountForDay() { // 일별 조회
         Pageable pageable = PageRequest.of(0, 3);
-        LocalDate day = LocalDate.now();
-        Date date = Date.from(day.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return diaryRepository.findByTop3ByOrderedByRecommendedCountForDay(date,pageable);
+        int year = LocalDate.now().getYear();
+        int month = LocalDate.now().getMonthValue();
+        int day = LocalDate.now().getDayOfMonth();
+
+        return diaryRepository.findByTop3ByOrderedByRecommendedCountForDay(year,month,day,pageable);
     }
 
     public Page<Diary> getTop3DiariesByRecommendedCountForWeek() { // 주별 조회
