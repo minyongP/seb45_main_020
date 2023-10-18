@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.WeekFields;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -90,7 +92,9 @@ public class DiaryService {
 
     public Page<Diary> getTop3DiariesByRecommendedCountForDay() { // 일별 조회
         Pageable pageable = PageRequest.of(0, 3);
-        return diaryRepository.findByTop3ByOrderedByRecommendedCountForDay(LocalDate.now(),pageable);
+        LocalDate day = LocalDate.now();
+        Date date = Date.from(day.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return diaryRepository.findByTop3ByOrderedByRecommendedCountForDay(date,pageable);
     }
 
     public Page<Diary> getTop3DiariesByRecommendedCountForWeek() { // 주별 조회
