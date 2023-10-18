@@ -19,7 +19,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -85,9 +88,32 @@ public class DiaryService {
         return diaryRepository.findByMemberMemberId(memberId, PageRequest.of(page - 1,10, Sort.by("diaryId").descending()));
     }
 
-    public Page<Diary> getTop3DiariesByRecommendedCount() {
+    public Page<Diary> getTop3DiariesByRecommendedCountForDay() { // 일별 조회
         Pageable pageable = PageRequest.of(0, 3);
-        return diaryRepository.findByTop3ByOrderedByRecommendedCount(pageable);
+        return diaryRepository.findByTop3ByOrderedByRecommendedCountForDay(LocalDate.now(),pageable);
+    }
+
+    public Page<Diary> getTop3DiariesByRecommendedCountForWeek() { // 주별 조회
+        Pageable pageable = PageRequest.of(0, 3);
+        int year = LocalDate.now().getYear();
+        int weekOfYear = LocalDate.now().get(WeekFields.of(Locale.getDefault()).weekOfWeekBasedYear());
+
+        int week = year * 100 + weekOfYear;
+
+        return diaryRepository.findByTop3ByOrderedByRecommendedCountForWeek(week, pageable);
+    }
+
+    public Page<Diary> getTop3DiariesByRecommendedCountForMonth() { // 월별 조회
+        Pageable pageable = PageRequest.of(0, 3);
+        int year = LocalDate.now().getYear();
+        int month = LocalDate.now().getMonthValue();
+        return diaryRepository.findByTop3ByOrderedByRecommendedCountForMonth(year,month,pageable);
+    }
+
+    public Page<Diary> getTop3DiariesByRecommendedCountForYear() { // 연별 조회
+        Pageable pageable = PageRequest.of(0, 3);
+        int year = LocalDate.now().getYear();
+        return diaryRepository.findByTop3ByOrderedByRecommendedCountForYear(year,pageable);
     }
 
     public void deleteDiary(Long diaryId) {
