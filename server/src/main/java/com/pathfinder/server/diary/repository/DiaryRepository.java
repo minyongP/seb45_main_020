@@ -9,14 +9,15 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
     Page<Diary> findByArea1(String area1, Pageable pageable);
     Page<Diary> findByMemberMemberId(Long memberId, Pageable pageable);
 
-    @Query("SELECT d FROM Diary d WHERE DATE(d.createdAt) = :requestDate ORDER BY d.recommendedCount DESC")
-    Page<Diary> findByTop3ByOrderedByRecommendedCountForDay(@Param("requestDate") LocalDate requestDate, Pageable pageable);
+    @Query("SELECT d FROM Diary d WHERE d.createdAt = :requestDate ORDER BY d.recommendedCount DESC")
+    Page<Diary> findByTop3ByOrderedByRecommendedCountForDay(@Param("requestDate") Date requestDate, Pageable pageable);
 
     @Query("SELECT d FROM Diary d WHERE YEARWEEK(d.createdAt, 1) = :requestWeek ORDER BY d.recommendedCount DESC")
     Page<Diary> findByTop3ByOrderedByRecommendedCountForWeek(@Param("requestWeek") int requestWeek, Pageable pageable);
