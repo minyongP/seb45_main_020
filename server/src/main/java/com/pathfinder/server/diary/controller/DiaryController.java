@@ -99,9 +99,39 @@ public class DiaryController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/recommend") // 추천순으로 상위 3개 게시글 리스트 조회
-    public ResponseEntity getDiariesByRecommendedCount() {
-        Page<Diary> pageDiaries = diaryService.getTop3DiariesByRecommendedCount();
+    @GetMapping("/recommend/day") // 추천순으로 상위 3개 게시글 리스트 조회(일)
+    public ResponseEntity getDiariesByRecommendedCountForDay() {
+        Page<Diary> pageDiaries = diaryService.getTop3DiariesByRecommendedCountForDay();
+
+        List<Diary> top3Diaries = pageDiaries.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.DiariesToDiaryResponseDtos(top3Diaries),
+                        pageDiaries),
+                HttpStatus.OK);
+    }
+    @GetMapping("/recommend/week") // 추천순으로 상위 3개 게시글 리스트 조회(주)
+    public ResponseEntity getDiariesByRecommendedCountForWeek() {
+        Page<Diary> pageDiaries = diaryService.getTop3DiariesByRecommendedCountForWeek();
+
+        List<Diary> top3Diaries = pageDiaries.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.DiariesToDiaryResponseDtos(top3Diaries),
+                        pageDiaries),
+                HttpStatus.OK);
+    }
+    @GetMapping("/recommend/month") // 추천순으로 상위 3개 게시글 리스트 조회(월)
+    public ResponseEntity getDiariesByRecommendedCountForMonth() {
+        Page<Diary> pageDiaries = diaryService.getTop3DiariesByRecommendedCountForMonth();
+
+        List<Diary> top3Diaries = pageDiaries.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.DiariesToDiaryResponseDtos(top3Diaries),
+                        pageDiaries),
+                HttpStatus.OK);
+    }
+    @GetMapping("/recommend/year") // 추천순으로 상위 3개 게시글 리스트 조회(년)
+    public ResponseEntity getDiariesByRecommendedCountForYear() {
+        Page<Diary> pageDiaries = diaryService.getTop3DiariesByRecommendedCountForYear();
 
         List<Diary> top3Diaries = pageDiaries.getContent();
         return new ResponseEntity<>(
